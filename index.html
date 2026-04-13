@@ -2,67 +2,221 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Willkommen auf meiner Seite</title>
+    <title>AMJ Chanda Rechner</title>
+
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        .amj-header {
+            background: #2575fc;
             color: white;
+            padding: 30px;
             text-align: center;
         }
 
-        header {
-            padding: 60px 20px;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 1.3rem;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 20px;
+        .container {
+            max-width: 1100px;
             margin: 40px auto;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 12px;
-            backdrop-filter: blur(6px);
+            display: flex;
+            gap: 30px;
+            padding: 0 20px;
         }
 
-        a.button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 25px;
+        .box {
             background: white;
-            color: #2575fc;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex: 1;
         }
 
-        a.button:hover {
-            background: #e6e6e6;
+        h3 {
+            margin-top: 0;
+            color: #2575fc;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .badge-success { background: #28a745; color: white; }
+        .badge-info { background: #17a2b8; color: white; }
+        .badge-warning { background: #ffc107; color: black; }
+        .badge-inverse { background: #333; color: white; }
+
+        button {
+            background: #ff9800;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #e68900;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+
+        hr {
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Hallo Welt!</h1>
-        <p>Willkommen auf meiner ersten richtig schönen HTML‑Seite.</p>
-    </header>
+<div class="amj-header">
+    <h1>AMJ – Chanda Berechnung</h1>
+</div>
 
-    <div class="card">
-        <h2>Über mich</h2>
-        <p>Hier kannst du etwas über dich schreiben oder ein Projekt vorstellen.</p>
-        <a class="button" href="#">Mehr erfahren</a>
+<div class="container">
+
+    <!-- LINKER BEREICH -->
+    <div class="box">
+        <h3>Chanda Rechner</h3>
+
+        <div class="control-group">
+            <label class="control-label">Monatliches Einkommen (€):</label>
+            <input id="txtincome" type="text" maxlength="7">
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Moosi Anteil:</label>
+            <select id="hdWassiyat">
+                <option value="3">1/3</option>
+                <option value="4">1/4</option>
+                <option value="5">1/5</option>
+                <option value="6">1/6</option>
+                <option value="7">1/7</option>
+                <option value="8">1/8</option>
+                <option value="9">1/9</option>
+                <option value="10" selected>1/10</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <span class="control-label">Moosi</span>
+            <span id="moosi" class="badge badge-success">0.00</span>
+            <span class="badge badge-inverse">€</span>
+        </div>
+
+        <div class="control-group">
+            <span class="control-label">Chanda Aam</span>
+            <span id="chaam" class="badge badge-info">0.00</span>
+            <span class="badge badge-inverse">€</span>
+        </div>
+
+        <div class="control-group">
+            <span class="control-label">Jalsa Salana</span>
+            <span id="jalsa" class="badge badge-warning">0.00</span>
+            <span class="badge badge-inverse">€</span>
+        </div>
+
+        <button onclick="resetCalculator()">Zurücksetzen</button>
     </div>
+
+    <!-- RECHTER BEREICH -->
+    <div class="box">
+        <h3>📅 Übersicht – Chanda Aam</h3>
+        <div class="summary-row"><span>Jährlich:</span><span id="chaamYear">0.00 €</span></div>
+        <div class="summary-row"><span>Jalsa Salana Jährlich:</span><span id="jalsaYear">0.00 €</span></div>
+        <hr>
+        <div class="summary-row"><span>Gesamt Aam:</span><span id="totalAam" style="color: green; font-weight: bold;">0.00 €</span></div>
+
+        <h3 style="margin-top: 30px;">📅 Übersicht – Moosi</h3>
+        <div class="summary-row"><span>Jährlich:</span><span id="moosiYear">0.00 €</span></div>
+        <div class="summary-row"><span>Jalsa Salana Jährlich:</span><span id="moosiJalsaYear">0.00 €</span></div>
+        <hr>
+        <div class="summary-row"><span>Gesamt Moosi:</span><span id="totalMoosi" style="color: green; font-weight: bold;">0.00 €</span></div>
+    </div>
+
+</div>
+
+<script>
+function isNumberKey(evt) {
+    const charCode = evt.which ? evt.which : evt.keyCode;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+}
+
+function chandacalc() {
+    const income = parseFloat(document.getElementById('txtincome').value) || 0;
+    const moosiFraction = parseInt(document.getElementById('hdWassiyat').value);
+
+    const moosi = income / moosiFraction;
+    const chaam = income * 0.0625;
+    const jalsa = income / 120;
+
+    const moosiYear = moosi * 12;
+    const chaamYear = chaam * 12;
+    const jalsaYear = jalsa * 12;
+
+    const totalAam = chaamYear + jalsaYear;
+    const totalMoosi = moosiYear + jalsaYear;
+
+    updateDisplay('moosi', moosi);
+    updateDisplay('chaam', chaam);
+    updateDisplay('jalsa', jalsa);
+
+    updateDisplay('chaamYear', chaamYear, ' €');
+    updateDisplay('jalsaYear', jalsaYear, ' €');
+    updateDisplay('totalAam', totalAam, ' €');
+
+    updateDisplay('moosiYear', moosiYear, ' €');
+    updateDisplay('moosiJalsaYear', jalsaYear, ' €');
+    updateDisplay('totalMoosi', totalMoosi, ' €');
+}
+
+function updateDisplay(id, value, suffix = '') {
+    document.getElementById(id).textContent = value.toFixed(2) + suffix;
+}
+
+function resetCalculator() {
+    document.getElementById('txtincome').value = '';
+    chandacalc();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('txtincome').addEventListener('keyup', chandacalc);
+    document.getElementById('txtincome').addEventListener('keypress', isNumberKey);
+    document.getElementById('hdWassiyat').addEventListener('change', chandacalc);
+    chandacalc();
+});
+</script>
 
 </body>
 </html>
